@@ -6,10 +6,11 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.Manifest
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.google_map.R
@@ -27,8 +28,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.io.IOException
-import java.net.CacheRequest
-import java.util.jar.Manifest
 
 class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks,
  GoogleApiClient.OnConnectionFailedListener{
@@ -38,6 +37,8 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
     internal var mCurrLocationMarker : Marker? = null
     internal var mGoogleApiClient : GoogleApiClient? = null
     internal lateinit var mLocationRequest: LocationRequest
+
+    private lateinit var search : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +53,54 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        //if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 buildGoogleApiClient()
                 mMap!!.isMyLocationEnabled = true
-            }
-        }else{
+            //}
+        }/*else{
             buildGoogleApiClient()
             mMap!!.isMyLocationEnabled = true
+        }*/
+    }
+
+    fun searchLocation(view: View) {
+
+        if(view.id == R.id.button_search){
+
+            val locationSearch:EditText = findViewById<EditText>(R.id.editText)
+            lateinit var location: String
+            location = locationSearch.text.toString()
+            var addressList: List<Address>? = null
+            val options = MarkerOptions()
+
+            if (location == null || location == "") {
+                Toast.makeText(applicationContext,"provide location",Toast.LENGTH_SHORT).show()
+            }
+            else{
+                val geoCoder = Geocoder(this)
+                try {
+                    addressList = geoCoder.getFromLocationName(location, 1)
+
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+
+                for(i in addressList!!.indices){
+                    val address = addressList!![i]
+                    val latLng = LatLng(address.latitude, address.longitude)
+                    options.position(latLng)
+                    options.title(location)
+                    mMap!!.addMarker(options)
+                    mMap!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+
+                }
+                /*val address = addressList!![0]
+                val latLng = LatLng(address.latitude, address.longitude)
+                mMap!!.addMarker(MarkerOptions().position(latLng).title(location))
+                mMap!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+                Toast.makeText(applicationContext, address.latitude.toString() + " " + address.longitude, Toast.LENGTH_LONG).show()
+           */ }
         }
     }
 
@@ -72,14 +113,14 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
         mGoogleApiClient!!.connect()
     }
 
-    override fun onConnected(p0: Bundle?) {
+    override fun onConnected(bundle: Bundle?) {
 
         mLocationRequest = LocationRequest()
         mLocationRequest.interval = 1000
         mLocationRequest.fastestInterval = 1000
         mLocationRequest.priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
 
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             LocationServices.getFusedLocationProviderClient(this)
         }
     }
@@ -118,27 +159,5 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    fun searchLocation(view : View){
-        val locationSearch : EditText = findViewById(R.id.editText)
-        lateinit var location : String
-        location = locationSearch.text.toString()
-        var addressList : List<Address>? = null
 
-        if(location == null || location == ""){
-            Toast.makeText(applicationContext, "provided location", Toast.LENGTH_LONG).show()
-        }else{
-            val geoCoder = Geocoder(this)
-            try {
-                addressList = geoCoder.getFromLocationName(location, 1)
-            }catch (e : IOException){
-                e.printStackTrace()
-            }
-
-            val address = addressList!![0]
-            val latLng = LatLng(address.latitude, address.longitude)
-            mMap!!.addMarker(MarkerOptions().position(latLng).title(location))
-            mMap!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
-            Toast.makeText(applicationContext, address.latitude.toString() + "" + address.longitude, Toast.LENGTH_LONG).show()
-        }
-    }
 }

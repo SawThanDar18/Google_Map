@@ -8,39 +8,10 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
-/*class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
-
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-    }
-
-    *//**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     *//*
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-    }
-}*/
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
@@ -53,20 +24,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
     }
 
     override fun onMapReady(p0: GoogleMap?) {
 
         googleMap = p0
 
-        val latLng = LatLng(16.871311, 96.199379)
-        val markerOptions : MarkerOptions = MarkerOptions().position(latLng).title("Myanmar")
+        val latLng = LatLng(17.132582, 96.141762)
+        val markerOptions : MarkerOptions = MarkerOptions().position(latLng).title("Yangon")
+
+        val latLng2 = LatLng(19.745, 96.12972)
+        val markerOptions2 : MarkerOptions = MarkerOptions().position(latLng2).title("Naypyitaw")
+
+        val latLng3 = LatLng(16.913553,96.170574)
+        val markerOptions3 : MarkerOptions = MarkerOptions().position(latLng3).title("North Okkalapa")
+
+        val latLng4 = LatLng(16.864718,96.132060)
+        val markerOptions4 : MarkerOptions = MarkerOptions().position(latLng4).title("Airport")
 
         val zoomLevel = 12.0f
 
         googleMap.let {
             it!!.addMarker(markerOptions)
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel))
-        }
+
+            it!!.addMarker(markerOptions2)
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng2, zoomLevel))
+
+            it!!.addMarker(markerOptions3)
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng3, zoomLevel))
+
+            it!!.addMarker(markerOptions4)
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng4, zoomLevel))
+         }
+
+        /*googleMap.let {
+            it!!.addMarker(markerOptions2)
+            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng2, zoomLevel))
+        }*/
     }
 }

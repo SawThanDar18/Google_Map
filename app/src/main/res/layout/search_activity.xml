@@ -20,12 +20,12 @@
                 android:hint="Search Location" />
 
         <Button
+                android:id="@+id/button_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:onClick="searchLocation"
-                android:text="Search"
-                tools:ignore="OnClick"/>
+                android:text="Search"/>
 
     </LinearLayout>
 </fragment>
