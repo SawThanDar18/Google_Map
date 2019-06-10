@@ -7,13 +7,10 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.Manifest
-import android.app.DownloadManager
-import android.content.Context
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.google_map.R
@@ -86,7 +83,7 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
         val markerOptions = MarkerOptions()
         markerOptions.position(latLng)
         markerOptions.title("Myanmar")
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
         mCurrLocationMarker = mMap!!.addMarker(markerOptions)
 
         //move map camera
@@ -96,7 +93,6 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
         //stop location updates
         if(mGoogleApiClient != null){
             LocationServices.getFusedLocationProviderClient(this)
-            //LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
         }
     }
 
@@ -156,7 +152,7 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
             if (location == null || location == "") {
                 Toast.makeText(applicationContext,"provide location",Toast.LENGTH_SHORT).show()
             }
-            else{
+            else {
                 val geoCoder = Geocoder(this)
                 try {
                     addressList = geoCoder.getFromLocationName(location, 1)
@@ -165,7 +161,7 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
                     e.printStackTrace()
                 }
 
-                for(i in addressList!!.indices){
+                for (i in addressList!!.indices) {
                     val address = addressList!![i]
                     val latLng = LatLng(address.latitude, address.longitude)
                     options.position(latLng)
@@ -174,12 +170,7 @@ class MapActivity : FragmentActivity(), OnMapReadyCallback, LocationListener, Go
                     mMap!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
 
                 }
-                /*val address = addressList!![0]
-                val latLng = LatLng(address.latitude, address.longitude)
-                mMap!!.addMarker(MarkerOptions().position(latLng).title(location))
-                mMap!!.animateCamera(CameraUpdateFactory.newLatLng(latLng))
-                Toast.makeText(applicationContext, address.latitude.toString() + " " + address.longitude, Toast.LENGTH_LONG).show()
-           */ }
+            }
         }
     }
 

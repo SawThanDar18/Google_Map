@@ -8,7 +8,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 
 
@@ -16,6 +15,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
     private var googleMap : GoogleMap? = null
+    lateinit var latLng : LatLng
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
         googleMap = p0
 
-        val latLng = LatLng(17.132582, 96.141762)
+        //val yangon = googleMap!!.addMarker(MarkerOptions().position(LatLng(17.132582, 96.141762)).title("yangon"))
+        /*val latLng = LatLng(17.132582, 96.141762)
         val markerOptions : MarkerOptions = MarkerOptions().position(latLng).title("Yangon")
 
         val latLng2 = LatLng(19.745, 96.12972)
@@ -57,11 +58,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback{
 
             it!!.addMarker(markerOptions4)
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng4, zoomLevel))
-         }
+         }*/
 
-        /*googleMap.let {
-            it!!.addMarker(markerOptions2)
-            it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng2, zoomLevel))
-        }*/
+        //addMarkers()
+
+        var markerList = ArrayList<MarkerData>()
+
+        markerList.add(MarkerData(16.811520, 96.176338,"Tamwe"))
+        markerList.add(MarkerData(16.836491, 96.165390, "YanKin"))
+        markerList.add(MarkerData(16.913553,96.170574, "North Okkalapa"))
+        markerList.add(MarkerData(16.864718,96.132060, "Air-port"))
+        markerList.add(MarkerData(16.793369, 96.145599, "Dagon"))
+        markerList.add(MarkerData(16.769100, 96.166890, "TheinPhyu"))
+        markerList.add(MarkerData(16.812536, 96.225327, "TharKayTa"))
+        markerList.add(MarkerData(16.824600, 96.135109, "KaMarYut"))
+
+        for(index in 0..markerList.size-1){
+            latLng = LatLng(markerList.get(index).latitude, markerList.get(index).longitude)
+            googleMap!!.addMarker(MarkerOptions().position(latLng).title(markerList.get(index).title))
+        }
+
+        googleMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f))
     }
+
+    /*private fun addMarkers() {
+        if(googleMap != null){
+            googleMap!!.addMarker(MarkerOptions().position(LatLng(17.132582, 96.141762)).title("Yangon"))
+            googleMap!!.addMarker(MarkerOptions().position(LatLng(19.745, 96.12972)).title("NayPyiTaw"))
+
+        }
+    }*/
 }
